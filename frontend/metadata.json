@@ -1,0 +1,8 @@
+{
+  "name": "PCMB Academy",
+  "description": "Enterprise-level education platform for Physics, Chemistry, Mathematics, and Biology with AI-powered tutoring.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ]
+}
