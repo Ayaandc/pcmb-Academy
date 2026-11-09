@@ -12,11 +12,22 @@ const aiRoutes = require("./routes/ai-new");
 const app = express();
 const PORT = Number(process.env.PORT) || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
-const allowedOrigins = (process.env.CLIENT_ORIGIN || "http://localhost:3000").split(",").map((origin) => origin.trim()).filter(Boolean);
+const defaultAllowedOrigins = [
+  "https://pcmb-academy.vercel.app",
+  "http://localhost:3000",
+  "http://localhost:4173",
+  "http://10.21.97.144:4173",
+];
+const configuredOrigins = [process.env.CLIENT_ORIGIN, process.env.FRONTEND_ORIGIN]
+  .filter(Boolean)
+  .flatMap((origins) => origins.split(","))
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+const allowedOrigins = new Set([...defaultAllowedOrigins, ...configuredOrigins]);
 
 app.use(cors({
   origin(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    if (!origin || allowedOrigins.has(origin)) return callback(null, true);
     return callback(new Error("Origin not allowed by CORS"));
   },
   methods: ["GET", "POST"],
